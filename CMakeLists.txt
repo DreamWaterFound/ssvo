@@ -4,7 +4,8 @@ project(ssvo)
 ## -----------------------
 ## User's option
 ## -----------------------
-option(SSVO_TEST_ENABLE "If build the test files." ON)
+# NOW WE NEED TURN IT TO OFF 
+option(SSVO_TEST_ENABLE "If build the test files." OFF)
 option(SSVO_DBOW_ENABLE "If use the DBoW library." ON)
 option(SSVO_TRACE_ENABLE "If use the time tracing." ON)
 message(STATUS "Test Enable    : "   ${SSVO_TEST_ENABLE})
@@ -24,7 +25,8 @@ endif()
 ## Build setting
 ## -----------------------
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
+    #set(CMAKE_BUILD_TYPE Release)
+    set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -79,7 +81,7 @@ include_directories(${fast_INCLUDE_DIR})
 # OpenCV
 find_package(OpenCV 3.1.0 REQUIRED)
 if(OpenCV_FOUND)
-    message("-- Found OpenCV ${OpenCV_VERSION} in ${OpenCV_INCLUDE_DIRS}")
+    message("-- GQ_SSVO ==> Found OpenCV ${OpenCV_VERSION} in ${OpenCV_INCLUDE_DIRS}")
     include_directories(${OpenCV_INCLUDE_DIRS})
 else()
     message(FATAL_ERROR "-- Can Not Found OpenCV3")
@@ -87,27 +89,34 @@ endif()
 
 # Eigen
 find_package(Eigen 3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
+message("-- GQ_SSVO ==> Found Eigen ${EIGEN3_VERSION} in ${EIGEN_INCLUDE_DIR}")
+include_directories(${EIGEN_INCLUDE_DIR})
+include_directories(${EIGEN_INCLUDE_DIR}/..)
 
 # Sophus
 FIND_PACKAGE(Sophus REQUIRED)
+message("-- GQ_SSVO ==> Found Sophus ${Sophus_VERSION} in ${Sophus_INCLUDE_DIRS}")
 include_directories(${Sophus_INCLUDE_DIRS})
 
 # glog
 find_package(Glog 0.3.5 REQUIRED)
+message("-- GQ_SSVO ==> Found Glog ${GLOG_VERSION} in ${GLOG_INCLUDE_DIR}")
 #include_directories(${GLOG_INCLUDE_DIR})
 
 # Ceres
 find_package(Ceres REQUIRED)
+message("-- GQ_SSVO ==> Found Ceres ${CERES_VERSION} in ${CERES_INCLUDE_DIRS}")
 include_directories(${CERES_INCLUDE_DIRS})
 
 # Pangolin
 find_package(Pangolin REQUIRED)
+message("-- GQ_SSVO ==> Found Pangolin ${Pangolin_VERSION} in ${Pangolin_INCLUDE_DIRS}")
 include_directories(${Pangolin_INCLUDE_DIRS})
 
 # DBoW3
 if(SSVO_DBOW_ENABLE)
 find_package(DBoW3 REQUIRED)
+message("-- GQ_SSVO ==> Found DBoW3 ${DBoW3_VERSION} in ${DBoW3_INCLUDE_DIRS}")
 include_directories(${DBoW3_INCLUDE_DIRS})
 endif()
 
