@@ -1,3 +1,14 @@
+/**
+ * @file config.hpp
+ * @author guoqing (1337841346@qq.com)
+ * @brief 从配置文件中加载参数并且导入ssvo
+ * @version 0.1
+ * @date 2019-01-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef _CONFIG_HPP_
 #define _CONFIG_HPP_
 
@@ -11,75 +22,99 @@ namespace ssvo{
 
 using std::string;
 
+/**
+ * @brief 提供了从配置文件中读取配置文件参数到ssvo的功能
+ * @detials 作为静态类被使用
+ * 
+ */
 class Config
 {
 public:
 
+    /**
+     * @names 读取各种参数
+     * @{
+     */
+
+    /** @brief 图像金字塔层数 */
     static int imageNLevel(){return getInstance().image_nlevel_;}
-
+    /** @brief TODO 像素误差?  */
     static double imagePixelSigma(){return getInstance().image_sigma_;}
-
+    /** @brief 最少角点  */
     static int initMinCorners(){return getInstance().init_min_corners_;}
-
+    /** @brief 最少追踪到的特征点数  */
     static int initMinTracked(){return getInstance().init_min_tracked_;}
-
+    /** @brief 相邻两帧间最小视差? TODO  */
     static int initMinDisparity(){return getInstance().init_min_disparity_;}
-
+    /** @brief 最少的内点数目  */
     static int initMinInliers(){return getInstance().init_min_inliers_;}
-
+    /** @brief 初始的RANSAC迭代次数  */
     static int initMaxRansacIters(){return getInstance().init_max_iters_;}
-
+    /** @brief 网格大小  */
     static int gridSize(){return getInstance().grid_size_;}
-
+    /** @brief 最小网格大小  */
     static int gridMinSize(){return getInstance().grid_min_size_;}
-
+    /** @brief fast角点最大阈值 */
     static int fastMaxThreshold(){return getInstance().fast_max_threshold_;}
-
+    /** @brief fast角点最小阈值 */
     static int fastMinThreshold(){return getInstance().fast_min_threshold_;}
-
+    /** @brief TODO */
     static double fastMinEigen(){return getInstance().fast_min_eigen_;}
-
+    /** @brief 地图尺度 */
     static double mapScale(){return getInstance().mapping_scale_;}
-
+    /** @brief TODO */
     static int minConnectionObservations(){return getInstance().mapping_min_connection_observations_;}
-
+    /** @brief 每帧最少角点个数 */
     static int minCornersPerKeyFrame(){return getInstance().mapping_min_corners_;}
-
+    /** @brief 最大重投影关键帧 */
     static int maxReprojectKeyFrames(){return getInstance().mapping_max_reproject_kfs_;}
-
+    /** @brief 参加局部BA时,最多参加的关键帧数目 */
     static int maxLocalBAKeyFrames(){return getInstance().mapping_max_local_ba_kfs_;}
-
+    /** @brief TODO */
     static int minLocalBAConnectedFts(){return getInstance().mapping_min_local_ba_connected_fts_;}
-
+    /** @brief 图像对齐时涉及到的图像金字塔中最顶层的图像层数 */
     static int alignTopLevel(){return getInstance().align_top_level_;}
-
+    /** @brief 图像对齐时,涉及到的图像金字塔中最底层的层数 */
     static int alignBottomLevel(){return getInstance().align_bottom_level_;}
-
+    /** @brief 图像对齐时使用的图像块大小 */
     static int alignPatchSize(){return getInstance().align_patch_size_;}
-
+    /** @brief 最大追踪的关键帧数目 */
     static int maxTrackKeyFrames(){return getInstance().max_local_kfs_;}
-
+    /** @brief TODO */
     static int minQualityFts(){return getInstance().min_quality_fts_;}
-
+    /** @brief TODO */
     static int maxQualityDropFts(){return getInstance().max_quality_drop_fts_;}
-
+    /** @brief 最大的种子buffer长度 */
     static int maxSeedsBuffer(){return getInstance().max_seeds_buffer_;}
-
+    /** @brief 处理的最大关键帧数目 */
     static int maxPerprocessKeyFrames(){return getInstance().max_perprocess_kfs_;}
-
+    /** @brief TODO */
     static string timeTracingDirectory(){return getInstance().time_trace_dir_;}
-
+    /** @brief 词袋模型中字典的存放位置 */
     static std::string DBoWDirectory(){return getInstance().dbow_dir_;}
 
+    /** @} */
+
 private:
+    /**
+     * @brief 创建并返回一个config类指针
+     * 
+     * @return Config& 
+     */
     static Config& getInstance()
     {
         static Config instance(file_name_);
         return instance;
     }
 
+    /**
+     * @brief Config类构造函数
+     * 
+     * @param[in] file_name 配置文件路径
+     */
     Config(string& file_name)
     {
+        //REVIEW 下面代码没有仔细看
         cv::FileStorage fs(file_name.c_str(), cv::FileStorage::READ);
         LOG_ASSERT(fs.isOpened()) << "Failed to open settings file at: " << file_name;
 
@@ -156,7 +191,8 @@ private:
     }
 
 public:
-    //! config file's name
+    //! config file's name TODO 为什么注释写成这种形式?
+    ///配置文件的路径
     static string file_name_;
 
 private:

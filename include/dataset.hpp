@@ -1,3 +1,14 @@
+/**
+ * @file dataset.hpp
+ * @author guoqing (1337841346@qq.com)
+ * @brief 实现数据集的读取
+ * @version 0.1
+ * @date 2019-01-18
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef _SSVO_DATASET_HPP_
 #define _SSVO_DATASET_HPP_
 
@@ -8,11 +19,24 @@
 
 namespace ssvo {
 
+/**
+ * @brief 实现读取TUMD数据集
+ * 
+ */
 class TUMDataReader {
 public:
+
+    /**
+     * @brief Construct a new TUMDataReader
+     * 
+     * @param[in] dataset_path          数据集的路径
+     * @param[in] association_file      关联文件,TUM数据集特有的
+     * @param[in] with_ground_truth     存储了真值的文件? 
+     */
     TUMDataReader(const string &dataset_path, const string &association_file, const bool with_ground_truth = false):
         dataset_path_(dataset_path), association_file_(association_file)
     {
+        //REVIEW  于问题研究无关,程序代码先不看
         size_t found = dataset_path.find_last_of("/\\");
         if(found + 1 != dataset_path.size())
             dataset_path_ += dataset_path.substr(found, 1);
@@ -54,6 +78,16 @@ public:
 
     }
 
+    /**
+     * @brief 根据索引,读取图像
+     * 
+     * @param[in]  index         图像索引
+     * @param[out] rgb_image     彩色图像文件名
+     * @param[out] depth_image   深度图像文件名
+     * @param[out] timestamp     时间戳
+     * @return true 
+     * @return false 
+     */
     bool readItemByIndex(size_t index, std::string &rgb_image, std::string &depth_image, double &timestamp) const
     {
         if(index >= N)
@@ -68,6 +102,15 @@ public:
     }
 
     //! used for some TUM dataset
+    /**
+     * @brief 根据索引获得数据集中的彩色图像
+     * 
+     * @param[in]  index        索引
+     * @param[out] rgb_image    彩色图像
+     * @param[out] timestamp    时间戳
+     * @return true 
+     * @return false 
+     */
     bool readItemByIndex(size_t index, std::string &rgb_image, double &timestamp) const
     {
         if(index >= N)
@@ -80,6 +123,17 @@ public:
         return true;
     }
 
+    /**
+     * @brief 根据索引,读取数据集中的图像,时间戳和轨迹真值
+     * 
+     * @param[in]  index            索引
+     * @param[out] rgb_image        彩色图像
+     * @param[out] depth_image      深度图像
+     * @param[out] timestamp        时间戳
+     * @param[out] ground_truth     真值
+     * @return true 
+     * @return false 
+     */
     bool readItemWithGroundTruth(size_t index, std::string &rgb_image, std::string &depth_image, double &timestamp, std::vector<double> &ground_truth) const
     {
         if(!readItemByIndex(index, rgb_image, depth_image, timestamp))
@@ -89,40 +143,63 @@ public:
     }
 
 public:
+    ///图像序列个数
     size_t N;
+    ///数据集路径
     std::string dataset_path_;
+    ///关联文件路径
     std::string association_file_;
+    ///时间戳序列
     std::vector<double> timestamps_;
+    ///彩色图像路径序列
     std::vector<std::string> rgb_images_;
+    ///深度图像路径序列
     std::vector<std::string> depth_images_;
+    ///真值数据序列
     std::vector<std::vector<double> > groundtruth_data_;
 };
 
+
+/**
+ * @brief EuRoc数据集读取器
+ * 
+ */
 class EuRocDataReader {
 public:
 
+    /** @brief 自定义图像类型 */
     struct Image{
-        double timestamp;
-        std::string path;
+        double timestamp;   ///<时间戳
+        std::string path;   ///<路径
     };
 
+    /** @brief IMU 数据格式 */
     struct IMUData{
-        double timestamp;
-        std::array<double, 3> gyro; //! w_RS_S_[x,y,z]
-        std::array<double, 3> acc;  //! a_RS_S_[x,y,z]
+        double timestamp;           ///<时间戳
+        std::array<double, 3> gyro; ///<陀螺仪数据          //! w_RS_S_[x,y,z] TODO ???
+        std::array<double, 3> acc;  ///<加速度计数据        //! a_RS_S_[x,y,z]
     };
 
+    /** @brief 真值数据类型 */
+    
     struct GroundTruthData{
-        double timestamp;
-        std::array<double, 3> p; //! p_RS_R_[x,y,z]
-        std::array<double, 4> q; //! q_RS_[w,x,y,z]
-        std::array<double, 3> v; //! v_RS_R_[x,y,z]
-        std::array<double, 3> w; //! b_w_RS_S_[x,y,z]
-        std::array<double, 3> a; //! b_a_RS_S_[x,y,z]
+        double timestamp;           ///<时间戳
+        std::array<double, 3> p;    ///<位置? TODO   //! p_RS_R_[x,y,z]
+        std::array<double, 4> q;    ///<旋转? TODO   //! q_RS_[w,x,y,z]
+        std::array<double, 3> v;    ///< TODO       //! v_RS_R_[x,y,z]
+        std::array<double, 3> w;    ///< TODO       //! b_w_RS_S_[x,y,z]
+        std::array<double, 3> a;    ///< TODO       //! b_a_RS_S_[x,y,z]
     };
 
+    /**
+     * @brief EuRoc数据集的构造函数
+     * 
+     * @param[in] dataset_path 数据集文件路径
+     * @param[in] info          TODO 
+     */
     EuRocDataReader(const std::string dataset_path, const bool info = false)
     {
+        //REVIEW 代码于研究内容无关,暂时不阅读
         std::string root_path = dataset_path;
         size_t found = root_path.find_last_of("/\\");
         if(found > root_path.size())
@@ -177,26 +254,66 @@ public:
 
     }
 
+    /**
+     * @names 得到各种参数
+     * @{
+     */
+
+    /** @brief 左目图像数目  */
     const size_t leftImageSize() const { return left_.size(); }
-
+    /** @brief 右目图像数目  */
     const size_t rightImageSize() const { return right_.size(); }
-
+    /** @brief IMU图像数目 */
     const size_t imuSize() const { return imu_.size(); }
-
+    /** @brief  真值轨迹点个数*/
     const size_t groundtruthSize() const { return groundtruth_.size(); }
-
+    /**
+     * @brief 获取某帧左目图像
+     * 
+     * @param[in] idx           图像索引
+     * @return const Image&     图像
+     */
     const Image& leftImage(size_t idx) const { return left_.at(idx); }
 
+    /**
+     * @brief 获取某帧右目图像
+     * 
+     * @param[in] idx           图像索引
+     * @return const Image&     图像
+     */
     const Image& rightImage(size_t idx) const { return right_.at(idx); }
 
+    /**
+     * @brief 获取个索引时刻的imu数据
+     * 
+     * @param[in] idx           imu数据索引
+     * @return const IMUData&   imu数据
+     */
     const IMUData& imu(size_t idx) const { return imu_.at(idx); }
 
+    /**
+     * @brief 获取某个索引时刻的轨迹真值
+     * 
+     * @param[in] idx                   索引
+     * @return const GroundTruthData&   轨迹真值
+     */
     const GroundTruthData& groundtruth(size_t idx) const { return groundtruth_.at(idx); }
+
+    /** @} */
 
 private:
 
+    /**
+     * @brief 加载图像数据
+     * 
+     * @param[in] root_path 数据集根目录
+     * @param[in] data_path 数据路径   TODO 啥数据?
+     * @param[out] images   得到的图像序列
+     * @return int          个数
+     */
     int loadCameraData(std::string root_path, std::string data_path, std::vector<Image> &images)
     {
+        //REVIEW 代码没看
         std::string camera_csv = root_path + "data.csv";
 
         std::ifstream file_stream(camera_csv, std::ifstream::in);
@@ -234,8 +351,16 @@ private:
         return 0;
     }
 
+    /**
+     * @brief 读取IMU数据
+     * 
+     * @param[in] path  数据路径
+     * @param[out] imu  IMU数据
+     * @return int      数据个数
+     */
     int loadIMUData(std::string path, std::vector<IMUData> &imu)
     {
+        //REVIEW 没有看代码
         //! csv
         std::string imu_csv = path + "data.csv";
         std::ifstream file_stream(imu_csv, std::ifstream::in);
@@ -280,6 +405,13 @@ private:
         return 0;
     }
 
+    /**
+     * @brief 加载轨迹真值数据
+     * 
+     * @param[in] path          轨迹真值数据存放路径
+     * @param[out] groundtruth  轨迹真值数据
+     * @return int              个数
+     */
     int loadGroundtruthData(std::string path, std::vector<GroundTruthData> &groundtruth)
     {
         std::string ground_truth_csv = path + "data.csv";
@@ -337,10 +469,11 @@ private:
 
 private:
 
-    std::vector<Image> left_;
-    std::vector<Image> right_;
-    std::vector<IMUData> imu_;
-    std::vector<GroundTruthData> groundtruth_;
+
+    std::vector<Image> left_;                   ///<左目图像序列
+    std::vector<Image> right_;                  ///<右目图像序列
+    std::vector<IMUData> imu_;                  ///<IMU数据序列
+    std::vector<GroundTruthData> groundtruth_;  ///<轨迹真值序列
 };
 
 }

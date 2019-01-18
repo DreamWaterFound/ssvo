@@ -25,15 +25,15 @@ endif()
 ## Build setting
 ## -----------------------
 if(NOT CMAKE_BUILD_TYPE)
-    #set(CMAKE_BUILD_TYPE Release)
-    set(CMAKE_BUILD_TYPE Debug)
+    set(CMAKE_BUILD_TYPE Release)
+    #set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 if(NOT MSVC)
-	# Check C++11 or C++0x support
+	Check C++11 or C++0x support
 	include(CheckCXXCompilerFlag)
 	CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 	CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)

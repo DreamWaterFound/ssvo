@@ -132,7 +132,7 @@ private:
     // Variables related to Global Bundle Adjustment
     bool RunningGBA_;
     bool FinishedGBA_;
-    //todo 还要在迭代的时候设置是否停止的标志位
+    //TODO  还要在迭代的时候设置是否停止的标志位
     bool StopGBA_;
     std::mutex mutex_GBA_;
     std::thread* thread_GBA_;
