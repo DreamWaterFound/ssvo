@@ -1,3 +1,8 @@
+师兄们完成的ssvo+闭环,这里是我为了自己理解所添加的注释.
+原 README.MD 文档如下
+
+-----
+
 # ssvo
 
 Semi-direct sparse odometry
