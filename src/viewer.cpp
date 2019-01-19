@@ -325,6 +325,7 @@ void Viewer::drawTrackedPoints(const Frame::Ptr &frame, cv::Mat &dst)
         cv::Scalar color(0, 255, 0);
         cv::circle(dst, px, 2, color, -1);
 
+        // 这里就是在点上显示文本的数据
         string id_str = std::to_string((frame->Tcw()*ft->mpt_->pose()).norm());//ft->mpt_->getFoundRatio());//
         cv::putText(dst, id_str, px-cv::Point2f(1,1), font_face, font_scale, color);
     }

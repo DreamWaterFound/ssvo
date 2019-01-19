@@ -73,7 +73,7 @@ public:
     DBoW3::FeatureVector feat_vec_;
 
 
-    //todo 可能有特征点融合的问题
+    //TODO 可能有特征点融合的问题
     std::unordered_map<uint64_t , cv::Mat> mptId_des;
 
     std::unordered_map<uint64_t , uint> mptId_nodeId;
@@ -108,7 +108,7 @@ private:
 
     std::set<KeyFrame::Ptr> loopEdges_;
 
-    //todo 删除（bad）的时候记着改
+    //TODO 删除（bad）的时候记着改
     KeyFrame::Ptr parent_;
 
 };
